@@ -1,0 +1,38 @@
+RewriteEngine On
+
+# Handle CORS preflight requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# Route API requests
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Auth routes
+RewriteRule ^auth/login/?$ auth/login.php [L,QSA]
+RewriteRule ^auth/register/?$ auth/register.php [L,QSA]
+RewriteRule ^auth/profile/?$ auth/profile.php [L,QSA]
+
+# Alumni routes
+RewriteRule ^alumni/?$ alumni/index.php [L,QSA]
+RewriteRule ^alumni/([0-9]+)/?$ alumni/index.php/$1 [L,QSA]
+RewriteRule ^alumni/upload-csv/?$ alumni/upload-csv.php [L,QSA]
+RewriteRule ^alumni/export/?$ alumni/export.php [L,QSA]
+
+# Analytics routes
+RewriteRule ^analytics/overview/?$ analytics/overview.php [L,QSA]
+RewriteRule ^analytics/department/([^/]+)/?$ analytics/department.php/$1 [L,QSA]
+RewriteRule ^analytics/department-comparison/?$ analytics/department-comparison.php [L,QSA]
+RewriteRule ^analytics/employment-trends/?$ analytics/employment-trends.php [L,QSA]
+
+# Curriculum suggestions routes
+RewriteRule ^curriculum-suggestions/?$ curriculum/index.php [L,QSA]
+RewriteRule ^curriculum-suggestions/([0-9]+)/?$ curriculum/index.php/$1 [L,QSA]
+
+# Users management routes
+RewriteRule ^users/?$ users/index.php [L,QSA]
+RewriteRule ^users/([0-9]+)/?$ users/index.php/$1 [L,QSA]
+
+# Reports routes
+RewriteRule ^reports/?$ reports/index.php [L,QSA]
+RewriteRule ^reports/generate/?$ reports/generate.php [L,QSA]

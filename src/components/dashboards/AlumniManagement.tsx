@@ -10,46 +10,97 @@ import {
   Trash2,
   Eye
 } from 'lucide-react';
-import { useAlumni } from '../../contexts/AlumniContext';
+import { useAlumniData } from '../../hooks/useAlumniData';
+import { AddAlumniModal } from '../modals/AddAlumniModal';
 
 export function AlumniManagement() {
-  const { alumni, addAlumni, updateAlumni, deleteAlumni } = useAlumni();
+  const { 
+    alumni, 
+    loading, 
+    error, 
+    pagination, 
+    addAlumni, 
+    updateAlumni, 
+    deleteAlumni, 
+    uploadCSV,
+    fetchAlumni 
+  } = useAlumniData();
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDepartment, setFilterDepartment] = useState('all');
   const [filterYear, setFilterYear] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
-  const [editingAlumni, setEditingAlumni] = useState(null);
 
   const departments = [...new Set(alumni.map(a => a.department))];
-  const graduationYears = [...new Set(alumni.map(a => a.graduationYear))].sort((a, b) => b - a);
+  const graduationYears = [...new Set(alumni.map(a => a.graduation_year))].sort((a, b) => b - a);
 
   const filteredAlumni = alumni.filter(alumnus => {
     const matchesSearch = alumnus.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          alumnus.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         alumnus.currentPosition.toLowerCase().includes(searchTerm.toLowerCase());
+                         (alumnus.current_position || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDepartment = filterDepartment === 'all' || alumnus.department === filterDepartment;
-    const matchesYear = filterYear === 'all' || alumnus.graduationYear.toString() === filterYear;
+    const matchesYear = filterYear === 'all' || alumnus.graduation_year.toString() === filterYear;
     
     return matchesSearch && matchesDepartment && matchesYear;
   });
 
-  const handleAddAlumni = (alumniData: any) => {
-    addAlumni({
-      ...alumniData,
-      id: Date.now().toString(),
-      updatedAt: new Date().toISOString()
-    });
-    setShowAddModal(false);
+  const handleAddAlumni = async (alumniData: any) => {
+    await addAlumni(alumniData);
   };
 
   const handleCSVUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === 'text/csv') {
-      // In a real app, you'd parse the CSV and add the data
-      alert('CSV upload functionality would be implemented here');
+      uploadCSV(file)
+        .then(() => {
+          alert('CSV uploaded successfully!');
+        })
+        .catch((error) => {
+          alert('Error uploading CSV: ' + error.message);
+        });
     }
   };
 
+  const handleSearch = () => {
+    fetchAlumni({
+      search: searchTerm,
+      department: filterDepartment !== 'all' ? filterDepartment : undefined,
+      graduation_year: filterYear !== 'all' ? parseInt(filterYear) : undefined
+    });
+  };
+
+  const handleDeleteAlumni = async (id: number) => {
+    if (confirm('Are you sure you want to delete this alumni record?')) {
+      try {
+        await deleteAlumni(id);
+        alert('Alumni record deleted successfully');
+      } catch (error) {
+        alert('Error deleting alumni record');
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <p className="text-red-800">Error: {error}</p>
+        <button 
+          onClick={() => fetchAlumni()}
+          className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -117,6 +168,14 @@ export function AlumniManagement() {
             ))}
           </select>
 
+          <button 
+            onClick={handleSearch}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Search className="h-4 w-4" />
+            Search
+          </button>
+
           <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
             <Download className="h-4 w-4" />
             Export
@@ -160,20 +219,20 @@ export function AlumniManagement() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-900">{alumnus.department}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{alumnus.graduationYear}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{alumnus.graduation_year}</td>
                   <td className="px-6 py-4">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{alumnus.currentPosition}</div>
+                      <div className="text-sm font-medium text-gray-900">{alumnus.current_position || 'Not specified'}</div>
                       <div className="text-sm text-gray-600">{alumnus.company}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      alumnus.isInField 
+                      alumnus.is_in_field 
                         ? 'bg-green-100 text-green-800' 
                         : 'bg-yellow-100 text-yellow-800'
                     }`}>
-                      {alumnus.isInField ? 'In-Field' : 'Out-of-Field'}
+                      {alumnus.is_in_field ? 'In-Field' : 'Out-of-Field'}
                     </span>
                   </td>
                   <td className="px-6 py-4">
@@ -182,13 +241,13 @@ export function AlumniManagement() {
                         <Eye className="h-4 w-4" />
                       </button>
                       <button 
-                        onClick={() => setEditingAlumni(alumnus)}
+                        onClick={() => {/* Implement edit modal */}}
                         className="p-1 text-green-600 hover:text-green-800 transition-colors"
                       >
                         <Edit className="h-4 w-4" />
                       </button>
                       <button 
-                        onClick={() => deleteAlumni(alumnus.id)}
+                        onClick={() => handleDeleteAlumni(alumnus.id)}
                         className="p-1 text-red-600 hover:text-red-800 transition-colors"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -211,24 +270,38 @@ export function AlumniManagement() {
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-600">
-          Showing {filteredAlumni.length} of {alumni.length} alumni
+          Showing {filteredAlumni.length} of {pagination.total} alumni
         </p>
         
         <div className="flex items-center gap-2">
-          <button className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+          <button 
+            disabled={pagination.page <= 1}
+            onClick={() => fetchAlumni({ page: pagination.page - 1 })}
+            className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
             Previous
           </button>
-          <button className="px-3 py-2 text-sm bg-blue-600 text-white rounded-lg">
-            1
-          </button>
-          <button className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-            2
-          </button>
-          <button className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+          
+          <span className="px-3 py-2 text-sm bg-blue-600 text-white rounded-lg">
+            {pagination.page} of {pagination.pages}
+          </span>
+          
+          <button 
+            disabled={pagination.page >= pagination.pages}
+            onClick={() => fetchAlumni({ page: pagination.page + 1 })}
+            className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
             Next
           </button>
         </div>
       </div>
+
+      {/* Add Alumni Modal */}
+      <AddAlumniModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSave={handleAddAlumni}
+      />
     </div>
   );
 }
