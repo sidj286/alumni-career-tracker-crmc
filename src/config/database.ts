@@ -11,4 +11,4 @@ export const dbConfig = {
 };
 
 // API base URL for your local XAMPP server
-export const API_BASE_URL = 'http://localhost/alumni-tracking-api';
+export const API_BASE_URL = 'http://localhost/alumni-tracking-api/api';
