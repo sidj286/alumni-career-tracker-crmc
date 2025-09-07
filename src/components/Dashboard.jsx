@@ -8,11 +8,7 @@ import { CurriculumSuggestions } from './dashboards/CurriculumSuggestions';
 import { UserManagement } from './dashboards/UserManagement';
 import { Reports } from './dashboards/Reports';
 
-interface DashboardProps {
-  onLogout: () => void;
-}
-
-export function Dashboard({ onLogout }: DashboardProps) {
+export function Dashboard({ onLogout }) {
   const [activeView, setActiveView] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

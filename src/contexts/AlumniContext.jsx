@@ -1,29 +1,8 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
-interface Alumni {
-  id: string;
-  name: string;
-  email: string;
-  department: string;
-  graduationYear: number;
-  currentPosition: string;
-  company: string;
-  isInField: boolean;
-  salary?: number;
-  location: string;
-  updatedAt: string;
-}
+const AlumniContext = createContext(undefined);
 
-interface AlumniContextType {
-  alumni: Alumni[];
-  addAlumni: (alumni: Alumni) => void;
-  updateAlumni: (id: string, alumni: Partial<Alumni>) => void;
-  deleteAlumni: (id: string) => void;
-}
-
-const AlumniContext = createContext<AlumniContextType | undefined>(undefined);
-
-const mockAlumni: Alumni[] = [
+const mockAlumni = [
   {
     id: '1',
     name: 'John Doe',
@@ -91,20 +70,20 @@ const mockAlumni: Alumni[] = [
   }
 ];
 
-export function AlumniProvider({ children }: { children: ReactNode }) {
-  const [alumni, setAlumni] = useState<Alumni[]>(mockAlumni);
+export function AlumniProvider({ children }) {
+  const [alumni, setAlumni] = useState(mockAlumni);
 
-  const addAlumni = (newAlumni: Alumni) => {
+  const addAlumni = (newAlumni) => {
     setAlumni(prev => [...prev, newAlumni]);
   };
 
-  const updateAlumni = (id: string, updatedData: Partial<Alumni>) => {
+  const updateAlumni = (id, updatedData) => {
     setAlumni(prev => prev.map(a => 
       a.id === id ? { ...a, ...updatedData, updatedAt: new Date().toISOString() } : a
     ));
   };
 
-  const deleteAlumni = (id: string) => {
+  const deleteAlumni = (id) => {
     setAlumni(prev => prev.filter(a => a.id !== id));
   };
 

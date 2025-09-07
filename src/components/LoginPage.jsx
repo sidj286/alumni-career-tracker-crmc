@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 import { GraduationCap, User, Lock, Users, BarChart3 } from 'lucide-react';
 
-interface LoginPageProps {
-  onLogin: () => void;
-}
-
-export function LoginPage({ onLogin }: LoginPageProps) {
+export function LoginPage({ onLogin }) {
   const [credentials, setCredentials] = useState({
     username: '',
     password: '',
     role: 'admin'
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     // Store auth data (in real app, this would be handled by backend)
