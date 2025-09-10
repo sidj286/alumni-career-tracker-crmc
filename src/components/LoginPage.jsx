@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GraduationCap, User, Lock, Users, BarChart3 } from 'lucide-react';
 
-export function LoginPage({ onLogin }) {
+function LoginPage({ onLogin }) {
   const [credentials, setCredentials] = useState({
     username: '',
     password: '',
@@ -158,4 +158,5 @@ export function LoginPage({ onLogin }) {
       </div>
     </div>
   );
-}
+
+export { LoginPage };
