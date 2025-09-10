@@ -158,5 +158,6 @@ function LoginPage({ onLogin }) {
       </div>
     </div>
   );
+}
 
 export { LoginPage };
