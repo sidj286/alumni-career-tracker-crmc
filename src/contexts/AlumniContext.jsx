@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
-const AlumniContext = createContext(undefined);
+const AlumniContext = createContext();
 
 const mockAlumni = [
   {
@@ -74,7 +74,7 @@ export function AlumniProvider({ children }) {
   const [alumni, setAlumni] = useState(mockAlumni);
 
   const addAlumni = (newAlumni) => {
-    setAlumni(prev => [...prev, newAlumni]);
+    setAlumni(prev => [...prev, { ...newAlumni, id: Date.now().toString() }]);
   };
 
   const updateAlumni = (id, updatedData) => {
@@ -101,7 +101,7 @@ export function AlumniProvider({ children }) {
 
 export function useAlumni() {
   const context = useContext(AlumniContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAlumni must be used within an AlumniProvider');
   }
   return context;

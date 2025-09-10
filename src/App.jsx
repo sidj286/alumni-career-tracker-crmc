@@ -27,17 +27,17 @@ function App() {
   };
 
   return (
-    <UserProvider>
-      <AlumniProvider>
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <UserProvider>
+        <AlumniProvider>
           {!isAuthenticated ? (
             <LoginPage onLogin={handleLogin} />
           ) : (
             <Dashboard onLogout={handleLogout} />
           )}
-        </div>
-      </AlumniProvider>
-    </UserProvider>
+        </AlumniProvider>
+      </UserProvider>
+    </div>
   );
 }
 
