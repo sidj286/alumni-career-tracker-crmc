@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import api from '../services/api';
 
 // Mock data for when backend is not available
 const mockAlumniData = [
@@ -85,27 +86,38 @@ export function useAlumniData(filters = {}) {
       setLoading(true);
       setError(null);
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Use mock data and apply filters
-      const filteredMockData = mockAlumniData.filter(alumnus => {
-        const matchesSearch = !newFilters.search || 
-          alumnus.name.toLowerCase().includes(newFilters.search.toLowerCase()) ||
-          alumnus.email.toLowerCase().includes(newFilters.search.toLowerCase());
-        const matchesDepartment = !newFilters.department || alumnus.department === newFilters.department;
-        const matchesYear = !newFilters.graduation_year || alumnus.graduation_year === newFilters.graduation_year;
+      try {
+        // Try to fetch from API first
+        const response = await api.get('/alumni', { params: newFilters });
         
-        return matchesSearch && matchesDepartment && matchesYear;
-      });
-      
-      setAlumni(filteredMockData);
-      setPagination({
-        page: 1,
-        limit: 50,
-        total: filteredMockData.length,
-        pages: Math.ceil(filteredMockData.length / 50)
-      });
+        if (response.data.success) {
+          setAlumni(response.data.data);
+          setPagination(response.data.pagination);
+        } else {
+          throw new Error('API response not successful');
+        }
+      } catch (apiError) {
+        console.warn('Backend not available, using mock data:', apiError);
+        
+        // Fallback to mock data when backend is not available
+        const filteredMockData = mockAlumniData.filter(alumnus => {
+          const matchesSearch = !newFilters.search || 
+            alumnus.name.toLowerCase().includes(newFilters.search.toLowerCase()) ||
+            alumnus.email.toLowerCase().includes(newFilters.search.toLowerCase());
+          const matchesDepartment = !newFilters.department || alumnus.department === newFilters.department;
+          const matchesYear = !newFilters.graduation_year || alumnus.graduation_year === newFilters.graduation_year;
+          
+          return matchesSearch && matchesDepartment && matchesYear;
+        });
+        
+        setAlumni(filteredMockData);
+        setPagination({
+          page: 1,
+          limit: 50,
+          total: filteredMockData.length,
+          pages: Math.ceil(filteredMockData.length / 50)
+        });
+      }
     } catch (err) {
       setError('Failed to load alumni data');
       console.error('Error fetching alumni:', err);
@@ -116,14 +128,24 @@ export function useAlumniData(filters = {}) {
 
   const addAlumni = async (alumniData) => {
     try {
-      // Simulate adding to local state
-      const newAlumni = { 
-        ...alumniData, 
-        id: Date.now(),
-        updated_at: new Date().toISOString().split('T')[0]
-      };
-      setAlumni(prev => [newAlumni, ...prev]);
-      return { success: true, message: 'Alumni added successfully' };
+      try {
+        // Try API first
+        const response = await api.post('/alumni', alumniData);
+        if (response.data.success) {
+          await fetchAlumni(); // Refresh the list
+          return response.data;
+        }
+        throw new Error('Failed to create alumni record');
+      } catch (apiError) {
+        // Fallback: add to local state when backend is not available
+        const newAlumni = { 
+          ...alumniData, 
+          id: Date.now(),
+          updated_at: new Date().toISOString().split('T')[0]
+        };
+        setAlumni(prev => [newAlumni, ...prev]);
+        return { success: true, message: 'Alumni added locally (backend unavailable)' };
+      }
     } catch (err) {
       setError('Failed to add alumni');
       throw err;
