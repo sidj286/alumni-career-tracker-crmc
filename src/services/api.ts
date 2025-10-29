@@ -23,6 +23,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error('API Error Details:', error.response || error);
     if (error.response?.status === 401) {
       localStorage.removeItem('authToken');
       window.location.href = '/login';

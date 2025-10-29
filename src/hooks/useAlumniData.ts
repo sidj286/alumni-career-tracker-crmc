@@ -96,7 +96,7 @@ export function useAlumniData(filters: AlumniFilters = {}) {
           throw new Error('API response not successful');
         }
       } catch (apiError) {
-        console.warn('Backend not available, using mock data:', apiError);
+        console.error('API Error:', apiError);
         // Use mock data when backend is not available
         const filteredMockData = mockAlumniData.filter(alumnus => {
           const matchesSearch = !newFilters.search || 
