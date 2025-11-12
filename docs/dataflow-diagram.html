@@ -14,7 +14,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             padding: 40px;
@@ -42,7 +42,8 @@
         }
         
         .section {
-            margin: 40px 0;
+            margin: 50px 0;
+            page-break-inside: avoid;
         }
         
         .section h2 {
@@ -50,161 +51,183 @@
             font-size: 1.8em;
             border-left: 4px solid #3b82f6;
             padding-left: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         
-        .section h3 {
-            color: #374151;
-            font-size: 1.4em;
-            margin: 25px 0 15px 0;
-        }
-        
-        .dataflow-container {
-            background: #f8fafc;
+        /* Dataflow Diagram Styles */
+        .dataflow-diagram {
+            background: #ffffff;
             border: 2px solid #e5e7eb;
             border-radius: 10px;
-            padding: 30px;
-            margin: 20px 0;
+            padding: 40px;
+            margin: 30px 0;
+            position: relative;
+            min-height: 600px;
         }
         
-        .layer {
+        .flow-level {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            margin: 30px 0;
+            margin: 60px 0;
             position: relative;
         }
         
-        .component {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
+        .flow-box {
+            background: #ffffff;
+            border: 2px solid #374151;
+            border-radius: 8px;
             padding: 20px;
-            border-radius: 10px;
             text-align: center;
-            min-width: 180px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-width: 160px;
+            max-width: 200px;
             position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
-        .component.frontend {
-            background: linear-gradient(135deg, #10b981, #059669);
+        .flow-box.user {
+            background: #dbeafe;
+            border-color: #3b82f6;
         }
         
-        .component.backend {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+        .flow-box.process {
+            background: #fef3c7;
+            border-color: #f59e0b;
         }
         
-        .component.database {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+        .flow-box.data {
+            background: #dcfce7;
+            border-color: #10b981;
         }
         
-        .component.external {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        .flow-box.external {
+            background: #f3e8ff;
+            border-color: #8b5cf6;
         }
         
-        .component h4 {
-            margin: 0 0 10px 0;
-            font-size: 1.1em;
+        .flow-box h4 {
+            margin: 0 0 8px 0;
+            font-size: 1em;
             font-weight: bold;
+            color: #1f2937;
         }
         
-        .component p {
+        .flow-box p {
             margin: 0;
-            font-size: 0.9em;
-            opacity: 0.9;
+            font-size: 0.85em;
+            color: #4b5563;
+            line-height: 1.3;
         }
         
-        .arrow {
+        /* Arrow Styles */
+        .arrow-down {
             position: absolute;
+            left: 50%;
+            bottom: -30px;
+            transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 20px solid #6b7280;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: -40px;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 20px solid #374151;
         }
         
-        .arrow.up {
-            border-top: none;
-            border-bottom: 20px solid #6b7280;
-            top: -40px;
-            bottom: auto;
-        }
-        
-        .flow-description {
-            background: #eff6ff;
-            border-left: 4px solid #3b82f6;
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .data-types {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .data-type {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 20px;
-        }
-        
-        .data-type h4 {
-            color: #1f2937;
-            margin: 0 0 10px 0;
-            font-size: 1.1em;
-        }
-        
-        .data-type ul {
-            margin: 0;
-            padding-left: 20px;
-            color: #6b7280;
-        }
-        
-        .process-flow {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-        }
-        
-        .process-step {
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 10px;
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .process-step::after {
-            content: '→';
+        .arrow-right {
             position: absolute;
             right: -25px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.5em;
-            color: #6b7280;
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-left: 20px solid #374151;
         }
         
-        .process-step:last-child::after {
-            display: none;
+        .arrow-left {
+            position: absolute;
+            left: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-right: 20px solid #374151;
         }
         
-        .legend {
+        /* Connection Lines */
+        .connection-line {
+            position: absolute;
+            background: #374151;
+            z-index: 1;
+        }
+        
+        .horizontal-line {
+            height: 2px;
+            width: 100px;
+        }
+        
+        .vertical-line {
+            width: 2px;
+            height: 60px;
+        }
+        
+        /* Context Diagram */
+        .context-diagram {
+            position: relative;
+            height: 500px;
+            margin: 40px 0;
+        }
+        
+        .central-process {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fef3c7;
+            border: 3px solid #f59e0b;
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
             display: flex;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
+            text-align: center;
+            font-weight: bold;
+            color: #92400e;
+        }
+        
+        .external-entity {
+            position: absolute;
+            background: #dbeafe;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            min-width: 120px;
+            font-weight: bold;
+            color: #1e40af;
+        }
+        
+        .entity-1 { top: 20px; left: 50%; transform: translateX(-50%); }
+        .entity-2 { top: 50%; right: 20px; transform: translateY(-50%); }
+        .entity-3 { bottom: 20px; left: 50%; transform: translateX(-50%); }
+        .entity-4 { top: 50%; left: 20px; transform: translateY(-50%); }
+        
+        /* Data Flow Lines */
+        .flow-line {
+            position: absolute;
+            stroke: #374151;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+        
+        /* Legend */
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin: 30px 0;
             padding: 20px;
@@ -218,29 +241,51 @@
             gap: 10px;
         }
         
-        .legend-color {
-            width: 20px;
+        .legend-box {
+            width: 30px;
             height: 20px;
+            border: 2px solid #374151;
             border-radius: 4px;
         }
         
-        .security-flow {
-            background: #fef2f2;
-            border: 2px solid #fecaca;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
+        /* Process Details */
+        .process-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
         }
         
-        .security-flow h4 {
-            color: #dc2626;
+        .process-detail {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .process-detail h4 {
+            color: #1f2937;
             margin: 0 0 15px 0;
+            font-size: 1.1em;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+        }
+        
+        .process-detail ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #4b5563;
+        }
+        
+        .process-detail li {
+            margin: 8px 0;
         }
         
         @media print {
             body { background: white; }
             .container { box-shadow: none; }
             .section { page-break-inside: avoid; }
+            .dataflow-diagram { page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -248,366 +293,337 @@
     <div class="container">
         <div class="header">
             <h1>Alumni Tracking System</h1>
-            <p>Data Flow Architecture & System Design</p>
+            <p>Data Flow Diagram & System Architecture</p>
         </div>
 
+        <!-- Context Diagram -->
         <div class="section">
-            <h2>System Overview</h2>
-            <p>The Alumni Tracking System is a comprehensive web-based application designed to monitor and analyze the career outcomes of university graduates. The system follows a three-tier architecture pattern with clear separation between presentation, application, and data layers.</p>
-            
-            <div class="dataflow-container">
-                <div class="layer">
-                    <div class="component frontend">
-                        <h4>Frontend Layer</h4>
-                        <p>React.js Application<br>User Interface & Interactions</p>
-                    </div>
-                    <div class="arrow"></div>
-                </div>
-                
-                <div class="layer">
-                    <div class="component backend">
-                        <h4>Backend Layer</h4>
-                        <p>PHP REST API<br>Business Logic & Processing</p>
-                    </div>
-                    <div class="arrow"></div>
-                </div>
-                
-                <div class="layer">
-                    <div class="component database">
-                        <h4>Database Layer</h4>
-                        <p>MySQL Database<br>Data Storage & Management</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Detailed Data Flow Architecture</h2>
-            
-            <div class="dataflow-container">
-                <h3>User Interaction Flow</h3>
-                
-                <div class="layer">
-                    <div class="component frontend">
-                        <h4>Login Page</h4>
-                        <p>User Authentication<br>Role Selection</p>
-                    </div>
-                    <div class="component frontend">
-                        <h4>Dashboard</h4>
-                        <p>Main Navigation<br>Overview Statistics</p>
-                    </div>
-                    <div class="component frontend">
-                        <h4>Management Modules</h4>
-                        <p>Alumni, Analytics, Reports<br>User Management</p>
-                    </div>
-                </div>
-                
-                <div class="arrow"></div>
-                
-                <div class="layer">
-                    <div class="component backend">
-                        <h4>Authentication API</h4>
-                        <p>/api/auth/login<br>JWT Token Generation</p>
-                    </div>
-                    <div class="component backend">
-                        <h4>Alumni API</h4>
-                        <p>/api/alumni<br>CRUD Operations</p>
-                    </div>
-                    <div class="component backend">
-                        <h4>Analytics API</h4>
-                        <p>/api/analytics<br>Data Processing</p>
-                    </div>
-                </div>
-                
-                <div class="arrow"></div>
-                
-                <div class="layer">
-                    <div class="component database">
-                        <h4>Users Table</h4>
-                        <p>Authentication Data<br>Role Management</p>
-                    </div>
-                    <div class="component database">
-                        <h4>Alumni Table</h4>
-                        <p>Graduate Information<br>Employment Data</p>
-                    </div>
-                    <div class="component database">
-                        <h4>Analytics Tables</h4>
-                        <p>Employment History<br>Department Stats</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Data Types & Flow</h2>
-            
-            <div class="data-types">
-                <div class="data-type">
-                    <h4>User Data</h4>
-                    <ul>
-                        <li>Authentication credentials</li>
-                        <li>Role-based permissions</li>
-                        <li>Department assignments</li>
-                        <li>Session management</li>
-                    </ul>
-                </div>
-                
-                <div class="data-type">
-                    <h4>Alumni Information</h4>
-                    <ul>
-                        <li>Personal details</li>
-                        <li>Academic records</li>
-                        <li>Employment status</li>
-                        <li>Career progression</li>
-                    </ul>
-                </div>
-                
-                <div class="data-type">
-                    <h4>Analytics Data</h4>
-                    <ul>
-                        <li>Employment statistics</li>
-                        <li>Department comparisons</li>
-                        <li>Salary trends</li>
-                        <li>Career outcomes</li>
-                    </ul>
-                </div>
-                
-                <div class="data-type">
-                    <h4>System Data</h4>
-                    <ul>
-                        <li>Activity logs</li>
-                        <li>Report generation</li>
-                        <li>Curriculum suggestions</li>
-                        <li>Configuration settings</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Request-Response Flow</h2>
-            
-            <div class="process-flow">
-                <div class="process-step">
-                    <h4>1. User Request</h4>
-                    <p>Frontend sends HTTP request to API endpoint</p>
-                </div>
-                
-                <div class="process-step">
-                    <h4>2. Authentication</h4>
-                    <p>JWT token validation and role verification</p>
-                </div>
-                
-                <div class="process-step">
-                    <h4>3. Data Processing</h4>
-                    <p>Business logic execution and data validation</p>
-                </div>
-                
-                <div class="process-step">
-                    <h4>4. Database Query</h4>
-                    <p>SQL operations and data retrieval/modification</p>
-                </div>
-                
-                <div class="process-step">
-                    <h4>5. Response</h4>
-                    <p>JSON response sent back to frontend</p>
-                </div>
-            </div>
-            
-            <div class="flow-description">
-                <strong>Example Flow:</strong> When a user clicks "Alumni Management", the frontend sends a GET request to /api/alumni, the backend validates the JWT token, queries the alumni table based on user permissions, and returns paginated alumni data in JSON format.
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Security Data Flow</h2>
-            
-            <div class="security-flow">
-                <h4>🔒 Security Measures</h4>
-                <div class="process-flow">
-                    <div class="process-step">
-                        <h4>Login</h4>
-                        <p>Credential validation<br>JWT token generation</p>
+            <h2>Level 0: Context Diagram</h2>
+            <div class="dataflow-diagram">
+                <div class="context-diagram">
+                    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                                    refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#374151" />
+                            </marker>
+                        </defs>
+                        
+                        <!-- Lines from entities to central process -->
+                        <line x1="50%" y1="80" x2="50%" y2="150" class="flow-line" />
+                        <line x1="85%" y1="50%" x2="65%" y2="50%" class="flow-line" />
+                        <line x1="50%" y1="420" x2="50%" y2="350" class="flow-line" />
+                        <line x1="15%" y1="50%" x2="35%" y2="50%" class="flow-line" />
+                    </svg>
+                    
+                    <div class="central-process">
+                        <div>
+                            <strong>Alumni Tracking<br>System</strong>
+                            <br><small>Process 0</small>
+                        </div>
                     </div>
                     
-                    <div class="process-step">
-                        <h4>Authorization</h4>
-                        <p>Role-based access control<br>Permission verification</p>
+                    <div class="external-entity entity-1">
+                        <strong>System Users</strong>
+                        <br><small>(Admin, Faculty, Alumni)</small>
                     </div>
                     
-                    <div class="process-step">
-                        <h4>Data Protection</h4>
-                        <p>Input validation<br>SQL injection prevention</p>
+                    <div class="external-entity entity-2">
+                        <strong>External APIs</strong>
+                        <br><small>(LinkedIn, Email Services)</small>
                     </div>
                     
-                    <div class="process-step">
-                        <h4>Audit Trail</h4>
-                        <p>Activity logging<br>System monitoring</p>
+                    <div class="external-entity entity-3">
+                        <strong>Database</strong>
+                        <br><small>(MySQL Server)</small>
+                    </div>
+                    
+                    <div class="external-entity entity-4">
+                        <strong>File System</strong>
+                        <br><small>(CSV Files, Reports)</small>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; text-align: center; color: #6b7280;">
+                    <p><strong>Data Flows:</strong> User Requests → System Processing → Database Operations → Response Generation</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level 1 DFD -->
+        <div class="section">
+            <h2>Level 1: System Decomposition</h2>
+            <div class="dataflow-diagram">
+                <!-- User Authentication Layer -->
+                <div class="flow-level">
+                    <div class="flow-box user">
+                        <h4>User Login</h4>
+                        <p>Authentication<br>Role Verification</p>
+                        <div class="arrow-down"></div>
+                    </div>
+                </div>
+                
+                <!-- Main Processing Layer -->
+                <div class="flow-level">
+                    <div class="flow-box process">
+                        <h4>1.0<br>User Management</h4>
+                        <p>Authentication<br>Authorization<br>Session Control</p>
+                        <div class="arrow-right"></div>
+                    </div>
+                    
+                    <div class="flow-box process">
+                        <h4>2.0<br>Alumni Management</h4>
+                        <p>CRUD Operations<br>Data Validation<br>Search & Filter</p>
+                        <div class="arrow-right"></div>
+                    </div>
+                    
+                    <div class="flow-box process">
+                        <h4>3.0<br>Analytics Engine</h4>
+                        <p>Data Processing<br>Statistical Analysis<br>Report Generation</p>
+                    </div>
+                </div>
+                
+                <!-- Data Processing Layer -->
+                <div class="flow-level">
+                    <div class="flow-box process">
+                        <h4>4.0<br>Data Import/Export</h4>
+                        <p>CSV Processing<br>File Validation<br>Bulk Operations</p>
+                        <div class="arrow-down"></div>
+                    </div>
+                    
+                    <div class="flow-box process">
+                        <h4>5.0<br>Curriculum Analysis</h4>
+                        <p>AI Processing<br>Trend Analysis<br>Recommendations</p>
+                        <div class="arrow-down"></div>
+                    </div>
+                    
+                    <div class="flow-box process">
+                        <h4>6.0<br>Reporting System</h4>
+                        <p>Report Generation<br>Data Visualization<br>Export Functions</p>
+                        <div class="arrow-down"></div>
+                    </div>
+                </div>
+                
+                <!-- Data Storage Layer -->
+                <div class="flow-level">
+                    <div class="flow-box data">
+                        <h4>D1: Users</h4>
+                        <p>Authentication Data<br>Roles & Permissions</p>
+                    </div>
+                    
+                    <div class="flow-box data">
+                        <h4>D2: Alumni</h4>
+                        <p>Graduate Records<br>Employment Data</p>
+                    </div>
+                    
+                    <div class="flow-box data">
+                        <h4>D3: Analytics</h4>
+                        <p>Processed Statistics<br>Historical Trends</p>
+                    </div>
+                    
+                    <div class="flow-box data">
+                        <h4>D4: Reports</h4>
+                        <p>Generated Reports<br>Export Files</p>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Level 2 DFD - Alumni Management Detail -->
         <div class="section">
-            <h2>API Endpoints & Data Flow</h2>
-            
-            <div class="data-types">
-                <div class="data-type">
-                    <h4>Authentication Endpoints</h4>
-                    <ul>
-                        <li>POST /api/auth/login - User authentication</li>
-                        <li>GET /api/auth/profile - User profile data</li>
-                        <li>PUT /api/auth/profile - Update profile</li>
-                    </ul>
+            <h2>Level 2: Alumni Management Process Detail</h2>
+            <div class="dataflow-diagram">
+                <!-- Input Processing -->
+                <div class="flow-level">
+                    <div class="flow-box user">
+                        <h4>User Input</h4>
+                        <p>Alumni Data<br>Search Queries<br>Filter Criteria</p>
+                        <div class="arrow-down"></div>
+                    </div>
                 </div>
                 
-                <div class="data-type">
-                    <h4>Alumni Management</h4>
-                    <ul>
-                        <li>GET /api/alumni - Retrieve alumni list</li>
-                        <li>POST /api/alumni - Create new alumni</li>
-                        <li>PUT /api/alumni/{id} - Update alumni</li>
-                        <li>DELETE /api/alumni/{id} - Remove alumni</li>
-                    </ul>
-                </div>
-                
-                <div class="data-type">
-                    <h4>Analytics Endpoints</h4>
-                    <ul>
-                        <li>GET /api/analytics/overview - System statistics</li>
-                        <li>GET /api/analytics/department - Department data</li>
-                        <li>GET /api/analytics/trends - Employment trends</li>
-                    </ul>
-                </div>
-                
-                <div class="data-type">
-                    <h4>Reporting & Export</h4>
-                    <ul>
-                        <li>GET /api/reports - Generated reports</li>
-                        <li>POST /api/reports/generate - Create report</li>
-                        <li>GET /api/alumni/export - Export data</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Database Schema Flow</h2>
-            
-            <div class="dataflow-container">
-                <h3>Entity Relationships</h3>
-                
-                <div class="data-types">
-                    <div class="data-type">
-                        <h4>Core Tables</h4>
-                        <ul>
-                            <li><strong>users</strong> - System authentication</li>
-                            <li><strong>alumni</strong> - Graduate information</li>
-                            <li><strong>employment_history</strong> - Career tracking</li>
-                            <li><strong>departments</strong> - Academic divisions</li>
-                        </ul>
+                <!-- Validation and Processing -->
+                <div class="flow-level">
+                    <div class="flow-box process">
+                        <h4>2.1<br>Input Validation</h4>
+                        <p>Data Validation<br>Format Checking<br>Business Rules</p>
+                        <div class="arrow-right"></div>
                     </div>
                     
-                    <div class="data-type">
-                        <h4>Analytics Tables</h4>
-                        <ul>
-                            <li><strong>curriculum_suggestions</strong> - AI recommendations</li>
-                            <li><strong>reports</strong> - Generated analytics</li>
-                            <li><strong>activity_logs</strong> - System audit trail</li>
-                        </ul>
+                    <div class="flow-box process">
+                        <h4>2.2<br>Authorization Check</h4>
+                        <p>Role Verification<br>Department Access<br>Permission Control</p>
+                        <div class="arrow-right"></div>
+                    </div>
+                    
+                    <div class="flow-box process">
+                        <h4>2.3<br>Data Processing</h4>
+                        <p>CRUD Operations<br>Search Processing<br>Filter Application</p>
                     </div>
                 </div>
                 
-                <div class="flow-description">
-                    <strong>Relationships:</strong> Users create and manage Alumni records. Alumni have Employment History entries. Curriculum Suggestions are generated based on Alumni career outcomes. All activities are logged for audit purposes.
+                <!-- Database Operations -->
+                <div class="flow-level">
+                    <div class="flow-box process">
+                        <h4>2.4<br>Database Interface</h4>
+                        <p>SQL Generation<br>Query Execution<br>Result Processing</p>
+                        <div class="arrow-down"></div>
+                    </div>
+                </div>
+                
+                <!-- Data Storage -->
+                <div class="flow-level">
+                    <div class="flow-box data">
+                        <h4>D2: Alumni Records</h4>
+                        <p>Personal Information<br>Academic Data<br>Employment History<br>Contact Details</p>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Data Dictionary -->
         <div class="section">
-            <h2>Technology Stack Data Flow</h2>
-            
+            <h2>Data Dictionary</h2>
+            <div class="process-details">
+                <div class="process-detail">
+                    <h4>Data Stores</h4>
+                    <ul>
+                        <li><strong>D1: Users</strong> - System user accounts and authentication data</li>
+                        <li><strong>D2: Alumni</strong> - Graduate information and employment records</li>
+                        <li><strong>D3: Analytics</strong> - Processed statistical data and trends</li>
+                        <li><strong>D4: Reports</strong> - Generated reports and export files</li>
+                        <li><strong>D5: Logs</strong> - System activity and audit trails</li>
+                    </ul>
+                </div>
+                
+                <div class="process-detail">
+                    <h4>External Entities</h4>
+                    <ul>
+                        <li><strong>System Users</strong> - Administrators, Faculty, Alumni accessing the system</li>
+                        <li><strong>External APIs</strong> - Third-party services for data enrichment</li>
+                        <li><strong>Database Server</strong> - MySQL database management system</li>
+                        <li><strong>File System</strong> - Local storage for imports/exports</li>
+                    </ul>
+                </div>
+                
+                <div class="process-detail">
+                    <h4>Data Flows</h4>
+                    <ul>
+                        <li><strong>User Credentials</strong> - Login information and authentication tokens</li>
+                        <li><strong>Alumni Data</strong> - Graduate records and employment information</li>
+                        <li><strong>Query Results</strong> - Processed data returned to users</li>
+                        <li><strong>Reports</strong> - Generated analytics and statistical summaries</li>
+                        <li><strong>System Logs</strong> - Activity tracking and audit information</li>
+                    </ul>
+                </div>
+                
+                <div class="process-detail">
+                    <h4>Processes</h4>
+                    <ul>
+                        <li><strong>1.0 User Management</strong> - Handle authentication and authorization</li>
+                        <li><strong>2.0 Alumni Management</strong> - Manage graduate records and data</li>
+                        <li><strong>3.0 Analytics Engine</strong> - Process data and generate insights</li>
+                        <li><strong>4.0 Data Import/Export</strong> - Handle file operations</li>
+                        <li><strong>5.0 Curriculum Analysis</strong> - AI-powered recommendations</li>
+                        <li><strong>6.0 Reporting System</strong> - Generate and manage reports</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Architecture -->
+        <div class="section">
+            <h2>System Architecture Overview</h2>
+            <div class="dataflow-diagram">
+                <div class="flow-level">
+                    <div class="flow-box user" style="background: #e0f2fe; border-color: #0891b2;">
+                        <h4>Presentation Layer</h4>
+                        <p>React.js Frontend<br>User Interface<br>Client-side Validation</p>
+                        <div class="arrow-down"></div>
+                    </div>
+                </div>
+                
+                <div class="flow-level">
+                    <div class="flow-box process" style="background: #fff7ed; border-color: #ea580c;">
+                        <h4>Application Layer</h4>
+                        <p>PHP REST API<br>Business Logic<br>Authentication</p>
+                        <div class="arrow-down"></div>
+                    </div>
+                </div>
+                
+                <div class="flow-level">
+                    <div class="flow-box data" style="background: #f0fdf4; border-color: #16a34a;">
+                        <h4>Data Layer</h4>
+                        <p>MySQL Database<br>Data Storage<br>Query Processing</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="section">
+            <h2>Legend</h2>
             <div class="legend">
                 <div class="legend-item">
-                    <div class="legend-color" style="background: linear-gradient(135deg, #10b981, #059669);"></div>
-                    <span>Frontend (React.js, Tailwind CSS)</span>
+                    <div class="legend-box" style="background: #dbeafe; border-color: #3b82f6;"></div>
+                    <span><strong>External Entity</strong> - External users or systems</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
-                    <span>Backend (PHP, Apache)</span>
+                    <div class="legend-box" style="background: #fef3c7; border-color: #f59e0b;"></div>
+                    <span><strong>Process</strong> - System functions and operations</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: linear-gradient(135deg, #ef4444, #dc2626);"></div>
-                    <span>Database (MySQL)</span>
+                    <div class="legend-box" style="background: #dcfce7; border-color: #10b981;"></div>
+                    <span><strong>Data Store</strong> - Database tables and files</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"></div>
-                    <span>External Services</span>
+                    <div class="legend-box" style="background: #f3e8ff; border-color: #8b5cf6;"></div>
+                    <span><strong>External System</strong> - Third-party services</span>
                 </div>
             </div>
         </div>
 
+        <!-- Process Specifications -->
         <div class="section">
-            <h2>System Performance & Scalability</h2>
-            
-            <div class="flow-description">
-                <strong>Performance Considerations:</strong>
-                <ul>
-                    <li><strong>Database Indexing:</strong> Optimized queries on frequently accessed columns (department, graduation_year, is_in_field)</li>
-                    <li><strong>Pagination:</strong> Large datasets are paginated to improve response times</li>
-                    <li><strong>Caching:</strong> Frontend caches API responses to reduce server load</li>
-                    <li><strong>Role-based Filtering:</strong> Data access is filtered at the database level based on user roles</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Error Handling & Data Validation</h2>
-            
-            <div class="process-flow">
-                <div class="process-step">
-                    <h4>Frontend Validation</h4>
-                    <p>Form validation<br>Input sanitization</p>
-                </div>
-                
-                <div class="process-step">
-                    <h4>API Validation</h4>
-                    <p>Request validation<br>Authentication checks</p>
-                </div>
-                
-                <div class="process-step">
-                    <h4>Database Constraints</h4>
-                    <p>Data integrity<br>Foreign key validation</p>
-                </div>
-                
-                <div class="process-step">
-                    <h4>Error Response</h4>
-                    <p>Structured error messages<br>User-friendly feedback</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Future Enhancements</h2>
-            
-            <div class="data-types">
-                <div class="data-type">
-                    <h4>Planned Features</h4>
+            <h2>Process Specifications</h2>
+            <div class="process-details">
+                <div class="process-detail">
+                    <h4>Process 1.0: User Management</h4>
                     <ul>
-                        <li>Real-time notifications</li>
-                        <li>Advanced analytics dashboard</li>
-                        <li>Mobile application</li>
-                        <li>LinkedIn API integration</li>
+                        <li><strong>Input:</strong> User credentials, role information</li>
+                        <li><strong>Processing:</strong> Validate credentials, generate JWT tokens, manage sessions</li>
+                        <li><strong>Output:</strong> Authentication status, user permissions</li>
+                        <li><strong>Data Stores:</strong> D1 (Users)</li>
                     </ul>
                 </div>
                 
-                <div class="data-type">
-                    <h4>Scalability Improvements</h4>
+                <div class="process-detail">
+                    <h4>Process 2.0: Alumni Management</h4>
                     <ul>
-                        <li>Microservices architecture</li>
-                        <li>Cloud deployment</li>
-                        <li>Load balancing</li>
-                        <li>Database clustering</li>
+                        <li><strong>Input:</strong> Alumni data, search queries, filter criteria</li>
+                        <li><strong>Processing:</strong> Validate data, perform CRUD operations, apply filters</li>
+                        <li><strong>Output:</strong> Alumni records, search results, status messages</li>
+                        <li><strong>Data Stores:</strong> D2 (Alumni), D5 (Logs)</li>
+                    </ul>
+                </div>
+                
+                <div class="process-detail">
+                    <h4>Process 3.0: Analytics Engine</h4>
+                    <ul>
+                        <li><strong>Input:</strong> Alumni data, department information, time periods</li>
+                        <li><strong>Processing:</strong> Calculate statistics, generate trends, create visualizations</li>
+                        <li><strong>Output:</strong> Statistical reports, charts, trend analysis</li>
+                        <li><strong>Data Stores:</strong> D2 (Alumni), D3 (Analytics)</li>
+                    </ul>
+                </div>
+                
+                <div class="process-detail">
+                    <h4>Process 4.0: Data Import/Export</h4>
+                    <ul>
+                        <li><strong>Input:</strong> CSV files, export requests, format specifications</li>
+                        <li><strong>Processing:</strong> Parse files, validate data, bulk operations</li>
+                        <li><strong>Output:</strong> Import status, exported files, error reports</li>
+                        <li><strong>Data Stores:</strong> D2 (Alumni), D4 (Reports)</li>
                     </ul>
                 </div>
             </div>
@@ -615,7 +631,7 @@
     </div>
 
     <script>
-        // Print to PDF functionality
+        // Auto-print functionality for PDF generation
         window.onload = function() {
             setTimeout(function() {
                 window.print();
