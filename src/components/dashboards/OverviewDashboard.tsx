@@ -87,11 +87,22 @@ export function OverviewDashboard() {
       <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 rounded-2xl p-8 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative z-10">
+          <div className="flex items-center gap-4 mb-4">
+            <img 
+              src="/image copy.png" 
+              alt="CRMC Logo" 
+              className="h-16 w-16 rounded-full bg-white p-1"
+            />
+            <div>
+              <h2 className="text-xl font-semibold text-blue-100">Cebu Roosevelt Memorial Colleges</h2>
+              <p className="text-blue-200 text-sm">Alumni Tracking & Career Analytics</p>
+            </div>
+          </div>
           <h1 className="text-3xl font-bold mb-2">
             Welcome back, {JSON.parse(localStorage.getItem('userInfo') || '{}').username}!
           </h1>
           <p className="text-blue-100 text-lg">
-            Here's what's happening with alumni tracking today
+            Here's what's happening with CRMC alumni tracking today
           </p>
         </div>
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-3xl"></div>
