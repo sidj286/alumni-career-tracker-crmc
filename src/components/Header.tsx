@@ -21,11 +21,19 @@ export function Header({ onLogout, toggleSidebar }: HeaderProps) {
           </button>
           
           <div className="hidden md:flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <img 
+                src="/image copy.png" 
+                alt="CRMC Logo" 
+                className="h-8 w-8 rounded-full"
+              />
+              <span className="text-lg font-semibold text-gray-800">CRMC Alumni System</span>
+            </div>
             <div className="relative">
               <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search alumni, departments..."
+                placeholder="Search CRMC alumni, departments..."
                 className="pl-10 pr-4 py-2 w-80 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
