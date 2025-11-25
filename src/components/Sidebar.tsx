@@ -21,7 +21,7 @@ export function Sidebar({ activeView, setActiveView, isOpen, setIsOpen }: Sideba
   const userRole = localStorage.getItem('userRole');
   
   const menuItems = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard, roles: ['admin', 'faculty', 'alumni'] },
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard, roles: ['admin', 'faculty', 'alumni', 'dean'] },
     { id: 'alumni', label: 'Alumni Management', icon: Users, roles: ['admin', 'faculty', 'dean'] },
     { id: 'analytics', label: 'Department Analytics', icon: BarChart3, roles: ['admin', 'faculty', 'dean'] },
     { id: 'curriculum', label: 'Curriculum Suggestions', icon: Lightbulb, roles: ['admin', 'faculty', 'dean'] },
@@ -56,7 +56,7 @@ export function Sidebar({ activeView, setActiveView, isOpen, setIsOpen }: Sideba
               alt="CRMC Logo" 
               className="h-10 w-10 rounded-full"
             />
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
               CRMC Alumni
             </span>
           </div>
@@ -85,7 +85,7 @@ export function Sidebar({ activeView, setActiveView, isOpen, setIsOpen }: Sideba
                     className={`
                       w-full flex items-center gap-3 px-4 py-3 text-left rounded-lg transition-all duration-200
                       ${isActive 
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg' 
+                        ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg' 
                         : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                       }
                     `}
@@ -102,7 +102,7 @@ export function Sidebar({ activeView, setActiveView, isOpen, setIsOpen }: Sideba
         {/* User info */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center">
               <span className="text-white font-semibold text-sm">
                 {JSON.parse(localStorage.getItem('userInfo') || '{}').username?.[0]?.toUpperCase() || 'U'}
               </span>
