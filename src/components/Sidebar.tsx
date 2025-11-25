@@ -22,11 +22,11 @@ export function Sidebar({ activeView, setActiveView, isOpen, setIsOpen }: Sideba
   
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard, roles: ['admin', 'faculty', 'alumni'] },
-    { id: 'alumni', label: 'Alumni Management', icon: Users, roles: ['admin', 'faculty'] },
-    { id: 'analytics', label: 'Department Analytics', icon: BarChart3, roles: ['admin', 'faculty'] },
-    { id: 'curriculum', label: 'Curriculum Suggestions', icon: Lightbulb, roles: ['admin', 'faculty'] },
+    { id: 'alumni', label: 'Alumni Management', icon: Users, roles: ['admin', 'faculty', 'dean'] },
+    { id: 'analytics', label: 'Department Analytics', icon: BarChart3, roles: ['admin', 'faculty', 'dean'] },
+    { id: 'curriculum', label: 'Curriculum Suggestions', icon: Lightbulb, roles: ['admin', 'faculty', 'dean'] },
     { id: 'users', label: 'User Management', icon: Settings, roles: ['admin'] },
-    { id: 'reports', label: 'Reports', icon: FileText, roles: ['admin', 'faculty'] },
+    { id: 'reports', label: 'Reports', icon: FileText, roles: ['admin', 'faculty', 'dean'] },
   ];
 
   const filteredMenuItems = menuItems.filter(item => 

@@ -14,6 +14,11 @@ import {
 export function CurriculumSuggestions() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
+  
+  // Get current user info to determine role and department
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+  const userRole = localStorage.getItem('userRole');
+  const userDepartment = userInfo.department;
 
   const suggestions = [
     {
@@ -108,17 +113,54 @@ export function CurriculumSuggestions() {
     }
   ];
 
-  const filteredSuggestions = suggestions.filter(suggestion => 
-    filterStatus === 'all' || suggestion.status === filterStatus
-  );
+  // Filter suggestions based on user role and department
+  const filteredSuggestions = suggestions.filter(suggestion => {
+    const statusMatch = filterStatus === 'all' || suggestion.status === filterStatus;
+    
+    // If user is a dean, only show suggestions for their department
+    if (userRole === 'dean' && userDepartment) {
+      return statusMatch && suggestion.department === userDepartment;
+    }
+    
+    // Admin sees all suggestions
+    return statusMatch;
+  });
+
+  // Filter status counts based on user role
+  const getFilteredSuggestions = (status: string) => {
+    let baseSuggestions = suggestions;
+    
+    // Filter by department for deans
+    if (userRole === 'dean' && userDepartment) {
+      baseSuggestions = suggestions.filter(s => s.department === userDepartment);
+    }
+    
+    if (status === 'all') return baseSuggestions;
+    return baseSuggestions.filter(s => s.status === status);
+  };
 
   const statusCounts = {
-    all: suggestions.length,
-    pending: suggestions.filter(s => s.status === 'pending').length,
-    approved: suggestions.filter(s => s.status === 'approved').length,
-    implemented: suggestions.filter(s => s.status === 'implemented').length,
-    rejected: suggestions.filter(s => s.status === 'rejected').length
+    all: getFilteredSuggestions('all').length,
+    pending: getFilteredSuggestions('pending').length,
+    approved: getFilteredSuggestions('approved').length,
+    implemented: getFilteredSuggestions('implemented').length,
+    rejected: getFilteredSuggestions('rejected').length
   };
+
+  // Get available departments for filter (admin sees all, dean sees only their department)
+  const availableDepartments = userRole === 'dean' && userDepartment 
+    ? [userDepartment]
+    : [...new Set(suggestions.map(s => s.department))];
+
+  const [filterDepartment, setFilterDepartment] = useState(
+    userRole === 'dean' && userDepartment ? userDepartment : 'all'
+  );
+
+  // Update filtered suggestions to include department filter
+  const finalFilteredSuggestions = filteredSuggestions.filter(suggestion => {
+    if (filterDepartment === 'all') return true;
+    return suggestion.department === filterDepartment;
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -154,8 +196,20 @@ export function CurriculumSuggestions() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Curriculum Suggestions</h1>
-          <p className="text-gray-600">AI-powered and faculty-submitted curriculum improvements</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Curriculum Suggestions
+            {userRole === 'dean' && userDepartment && (
+              <span className="text-lg font-normal text-gray-600 ml-2">
+                - {userDepartment}
+              </span>
+            )}
+          </h1>
+          <p className="text-gray-600">
+            {userRole === 'dean' 
+              ? `AI-powered curriculum improvements for ${userDepartment} department`
+              : 'AI-powered and faculty-submitted curriculum improvements across all departments'
+            }
+          </p>
         </div>
         
         <div className="flex flex-wrap gap-3">
@@ -213,6 +267,20 @@ export function CurriculumSuggestions() {
             <option value="implemented">Implemented</option>
             <option value="rejected">Rejected</option>
           </select>
+          
+          {/* Department filter - only show for admin */}
+          {userRole === 'admin' && (
+            <select
+              value={filterDepartment}
+              onChange={(e) => setFilterDepartment(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="all">All Departments</option>
+              {availableDepartments.map(dept => (
+                <option key={dept} value={dept}>{dept}</option>
+              ))}
+            </select>
+          )}
 
           <button className="ml-auto flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
             <Download className="h-4 w-4" />
@@ -223,7 +291,7 @@ export function CurriculumSuggestions() {
 
       {/* Suggestions List */}
       <div className="space-y-4">
-        {filteredSuggestions.map((suggestion) => (
+        {finalFilteredSuggestions.map((suggestion) => (
           <div key={suggestion.id} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-start gap-4">
@@ -286,7 +354,7 @@ export function CurriculumSuggestions() {
               </div>
             </div>
             
-            {suggestion.status === 'pending' && (
+            {suggestion.status === 'pending' && userRole === 'admin' && (
               <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
                 <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
                   <CheckCircle className="h-4 w-4" />
@@ -307,10 +375,15 @@ export function CurriculumSuggestions() {
         ))}
       </div>
 
-      {filteredSuggestions.length === 0 && (
+      {finalFilteredSuggestions.length === 0 && (
         <div className="text-center py-12 bg-white rounded-xl">
           <Lightbulb className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600">No suggestions found matching your criteria</p>
+          <p className="text-gray-600">
+            {userRole === 'dean' 
+              ? `No curriculum suggestions found for ${userDepartment} department`
+              : 'No suggestions found matching your criteria'
+            }
+          </p>
         </div>
       )}
     </div>

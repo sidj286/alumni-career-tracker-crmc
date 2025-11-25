@@ -3,9 +3,10 @@ import { GraduationCap, User, Lock, Users, BarChart3, Shield, Eye, EyeOff } from
 
 interface LoginPageProps {
   onLogin: () => void;
+  onShowRegister: () => void;
 }
 
-export function LoginPage({ onLogin }: LoginPageProps) {
+export function LoginPage({ onLogin, onShowRegister }: LoginPageProps) {
   const [credentials, setCredentials] = useState({
     username: '',
     password: '',
@@ -249,6 +250,12 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
             {/* Footer */}
             <div className="mt-6 text-center">
+              <button
+                onClick={onShowRegister}
+                className="text-red-600 hover:text-red-700 font-medium transition-colors mb-4"
+              >
+                Need an account? Register here
+              </button>
               <p className="text-xs text-gray-500">
                 © 2024 Cebu Roosevelt Memorial Colleges. All rights reserved.
               </p>
