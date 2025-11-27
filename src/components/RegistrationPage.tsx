@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GraduationCap, User, Lock, Users, Mail, Building, Shield, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { authService } from '../services/authService';
 
 interface RegistrationPageProps {
   onRegister: () => void;
@@ -76,19 +77,22 @@ export function RegistrationPage({ onRegister, onBackToLogin }: RegistrationPage
 
     setIsLoading(true);
     
-    // Simulate registration process
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Store registration data (in real app, this would be handled by backend)
-    localStorage.setItem('registrationData', JSON.stringify({
-      ...formData,
-      id: Date.now(),
-      createdAt: new Date().toISOString()
-    }));
-    
-    setIsLoading(false);
-    alert('Registration successful! Please contact an administrator to activate your account.');
-    onBackToLogin();
+    try {
+      const response = await authService.register(formData);
+      
+      if (response.success) {
+        alert('Registration successful! You can now login with your credentials.');
+        onBackToLogin();
+      } else {
+        alert('Registration failed: ' + response.error);
+      }
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      const errorMessage = error.response?.data?.error || 'Registration failed. Please try again.';
+      alert('Registration failed: ' + errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
