@@ -197,7 +197,7 @@ export function UserManagement() {
           >
             <option value="all">All Roles</option>
             <option value="admin">Administrators</option>
-            <option value="faculty">Faculty</option>
+            <option value="dean">Deans</option>
             <option value="alumni">Alumni</option>
           </select>
 

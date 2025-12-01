@@ -3,7 +3,7 @@ import api from './api';
 export interface LoginCredentials {
   username: string;
   password: string;
-  role: 'admin' | 'faculty' | 'alumni' | 'dean';
+  role: 'admin' | 'alumni' | 'dean';
 }
 
 export interface RegisterData {
@@ -12,7 +12,7 @@ export interface RegisterData {
   password: string;
   confirmPassword: string;
   fullName: string;
-  role: 'admin' | 'dean';
+  role: 'admin' | 'dean' | 'alumni';
   department?: string;
 }
 
@@ -20,7 +20,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  role: 'admin' | 'faculty' | 'alumni' | 'dean';
+  role: 'admin' | 'alumni' | 'dean';
   department?: string;
   created_at: string;
   last_login?: string;

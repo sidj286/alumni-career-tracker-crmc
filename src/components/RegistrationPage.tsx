@@ -283,14 +283,15 @@ export function RegistrationPage({ onRegister, onBackToLogin }: RegistrationPage
                 >
                   <option value="dean">Dean</option>
                   <option value="admin">Administrator</option>
+                  <option value="alumni">Alumni</option>
                 </select>
               </div>
 
               {/* Department (only for Dean) */}
-              {formData.role === 'dean' && (
+              {(formData.role === 'dean' || formData.role === 'alumni') && (
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Department
+                    {formData.role === 'dean' ? 'Department' : 'Graduated Department'}
                   </label>
                   <div className="relative">
                     <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -301,7 +302,7 @@ export function RegistrationPage({ onRegister, onBackToLogin }: RegistrationPage
                         errors.department ? 'border-red-500' : 'border-gray-300'
                       }`}
                     >
-                      <option value="">Select Department</option>
+                      <option value="">{formData.role === 'dean' ? 'Select Department' : 'Select Graduated Department'}</option>
                       {departments.map(dept => (
                         <option key={dept} value={dept}>{dept}</option>
                       ))}
