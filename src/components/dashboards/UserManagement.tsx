@@ -1,16 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  Users, 
-  Plus, 
-  Search, 
-  Filter,
-  MoreHorizontal,
-  Edit,
-  Trash2,
-  Shield,
-  Mail,
-  Calendar
-} from 'lucide-react';
+import { Users, Plus, Search, Filter, MoreHorizontal, CreditCard as Edit, Trash2, Shield, Mail, Calendar } from 'lucide-react';
 
 export function UserManagement() {
   const [searchTerm, setSearchTerm] = useState('');

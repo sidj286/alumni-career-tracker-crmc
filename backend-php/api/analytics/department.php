@@ -41,7 +41,7 @@ if (empty($department)) {
 }
 
 // Role-based access control
-if ($payload['role'] === 'faculty' && $payload['department'] !== $department) {
+if ($payload['role'] === 'dean' && $payload['department'] !== $department) {
     http_response_code(403);
     echo json_encode(['error' => 'Access denied to this department']);
     exit();

@@ -65,7 +65,7 @@ try {
     $insertQuery = "INSERT INTO users (username, email, password_hash, role, department, is_active) VALUES (?, ?, ?, ?, ?, ?)";
     $insertStmt = $db->prepare($insertQuery);
     
-    $department = $input['role'] === 'dean' ? $input['department'] : null;
+    $department = ($input['role'] === 'dean' || $input['role'] === 'alumni') ? $input['department'] : null;
     $isActive = true; // Auto-activate for demo, in production you might want approval workflow
     
     $result = $insertStmt->execute([

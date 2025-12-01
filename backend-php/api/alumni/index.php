@@ -63,7 +63,7 @@ function handleGetAlumni($db, $payload) {
     $params = [];
 
     // Role-based access control
-    if ($payload['role'] === 'faculty') {
+    if ($payload['role'] === 'dean') {
         $where[] = "department = ?";
         $params[] = $payload['department'];
     }
