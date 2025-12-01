@@ -20,8 +20,8 @@ export function UserManagement() {
     {
       id: 2,
       name: 'Prof. Sarah Johnson',
-      email: 's.johnson@university.edu',
-      role: 'faculty',
+      email: 's.johnson@crmc.edu',
+      role: 'dean',
       department: 'Computer Science',
       lastLogin: '2024-01-19',
       status: 'active',
@@ -30,8 +30,8 @@ export function UserManagement() {
     {
       id: 3,
       name: 'Dr. Michael Chen',
-      email: 'm.chen@university.edu',
-      role: 'faculty',
+      email: 'm.chen@crmc.edu',
+      role: 'dean',
       department: 'Business Administration',
       lastLogin: '2024-01-18',
       status: 'active',
@@ -40,8 +40,8 @@ export function UserManagement() {
     {
       id: 4,
       name: 'Prof. Lisa Anderson',
-      email: 'l.anderson@university.edu',
-      role: 'faculty',
+      email: 'l.anderson@crmc.edu',
+      role: 'alumni',
       department: 'Psychology',
       lastLogin: '2024-01-15',
       status: 'inactive',
@@ -50,8 +50,8 @@ export function UserManagement() {
     {
       id: 5,
       name: 'Dr. Robert Wilson',
-      email: 'r.wilson@university.edu',
-      role: 'faculty',
+      email: 'r.wilson@crmc.edu',
+      role: 'dean',
       department: 'Engineering',
       lastLogin: '2024-01-20',
       status: 'active',
@@ -71,7 +71,7 @@ export function UserManagement() {
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'admin': return 'bg-red-100 text-red-800';
-      case 'faculty': return 'bg-blue-100 text-blue-800';
+      case 'dean': return 'bg-blue-100 text-blue-800';
       case 'alumni': return 'bg-green-100 text-green-800';
       default: return 'bg-gray-100 text-gray-800';
     }
@@ -80,7 +80,7 @@ export function UserManagement() {
   const getRoleIcon = (role: string) => {
     switch (role) {
       case 'admin': return <Shield className="h-4 w-4" />;
-      case 'faculty': return <Users className="h-4 w-4" />;
+      case 'dean': return <Users className="h-4 w-4" />;
       case 'alumni': return <Users className="h-4 w-4" />;
       default: return <Users className="h-4 w-4" />;
     }
@@ -143,9 +143,9 @@ export function UserManagement() {
             </div>
             <div>
               <h3 className="text-2xl font-bold text-gray-900">
-                {users.filter(u => u.role === 'faculty').length}
+                {users.filter(u => u.role === 'dean').length}
               </h3>
-              <p className="text-gray-600 text-sm">Faculty</p>
+              <p className="text-gray-600 text-sm">Deans</p>
             </div>
           </div>
         </div>

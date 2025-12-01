@@ -75,7 +75,7 @@ export function OverviewDashboard() {
     },
     {
       action: 'New user registered',
-      details: 'Dr. Sarah Johnson joined as Faculty',
+      details: 'Dr. Sarah Johnson joined as Dean',
       time: '1 day ago',
       type: 'user'
     }
