@@ -190,7 +190,7 @@ export function LoginPage({ onLogin, onShowRegister }: LoginPageProps) {
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    <option value="dean">Dean</option>
+                  </button>
                 </div>
               </div>
 
@@ -207,6 +207,7 @@ export function LoginPage({ onLogin, onShowRegister }: LoginPageProps) {
                   <option value="admin">Administrator</option>
                   <option value="faculty">Faculty / Department Head</option>
                   <option value="alumni">Alumni</option>
+                  <option value="dean">Dean</option>
                 </select>
               </div>
 
