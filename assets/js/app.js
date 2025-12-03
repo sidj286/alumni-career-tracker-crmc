@@ -2,6 +2,8 @@
 let currentUser = null;
 let currentPage = 'overview';
 let sidebarOpen = false;
+let notifications = [];
+let unreadCount = 0;
 
 // Navigation Menu Items
 const menuItems = {
@@ -29,6 +31,7 @@ const menuItems = {
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
     setupEventListeners();
+    initializeNotifications();
 });
 
 function initializeApp() {
@@ -90,6 +93,21 @@ function setupEventListeners() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', handleLogout);
     }
+    
+    // Notification handlers
+    const notificationBtn = document.getElementById('notificationBtn');
+    const notificationDropdown = document.getElementById('notificationDropdown');
+    
+    if (notificationBtn) {
+        notificationBtn.addEventListener('click', toggleNotifications);
+    }
+    
+    // Close notifications when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.notification-container')) {
+            closeNotifications();
+        }
+    });
 }
 
 // Authentication Functions
@@ -190,6 +208,7 @@ function showDashboard() {
     showPage('dashboard');
     updateUserInfo();
     buildNavigation();
+    loadNotifications();
     loadPage('overview');
 }
 
@@ -203,6 +222,9 @@ function updateUserInfo() {
     if (userNameEl) userNameEl.textContent = currentUser.username;
     if (userRoleEl) userRoleEl.textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
     if (userAvatarEl) userAvatarEl.textContent = currentUser.username.charAt(0).toUpperCase();
+    
+    // Update notification badge
+    updateNotificationBadge();
 }
 
 function buildNavigation() {
@@ -901,6 +923,250 @@ function loadAnalyticsData() {
     console.log('Loading analytics data...');
 }
 
+// Notification System
+function initializeNotifications() {
+    // Initialize notification system
+    notifications = [];
+    unreadCount = 0;
+}
+
+function loadNotifications() {
+    if (!currentUser) return;
+    
+    // Generate role-specific notifications
+    notifications = generateNotificationsForRole(currentUser.role);
+    unreadCount = notifications.filter(n => !n.read).length;
+    updateNotificationBadge();
+    renderNotifications();
+}
+
+function generateNotificationsForRole(role) {
+    const baseNotifications = [];
+    const now = new Date();
+    
+    switch (role) {
+        case 'alumni':
+            return [
+                {
+                    id: 1,
+                    title: 'Profile Update Request',
+                    message: 'Please update your current employment status',
+                    type: 'info',
+                    read: false,
+                    timestamp: new Date(now - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+                    icon: 'fas fa-user-edit'
+                },
+                {
+                    id: 2,
+                    title: 'Career Survey Available',
+                    message: 'Help us improve our programs by completing the career outcome survey',
+                    type: 'success',
+                    read: false,
+                    timestamp: new Date(now - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+                    icon: 'fas fa-clipboard-list'
+                },
+                {
+                    id: 3,
+                    title: 'System Maintenance',
+                    message: 'Scheduled maintenance on Sunday, 2:00 AM - 4:00 AM',
+                    type: 'warning',
+                    read: true,
+                    timestamp: new Date(now - 7 * 24 * 60 * 60 * 1000), // 1 week ago
+                    icon: 'fas fa-tools'
+                }
+            ];
+            
+        case 'dean':
+            return [
+                {
+                    id: 1,
+                    title: 'New Alumni Added',
+                    message: '3 new Computer Science alumni added to the system',
+                    type: 'success',
+                    read: false,
+                    timestamp: new Date(now - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+                    icon: 'fas fa-user-plus'
+                },
+                {
+                    id: 2,
+                    title: 'AI Curriculum Suggestion',
+                    message: 'New suggestion: Add Data Science Specialization Track',
+                    type: 'info',
+                    read: false,
+                    timestamp: new Date(now - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+                    icon: 'fas fa-lightbulb'
+                },
+                {
+                    id: 3,
+                    title: 'Department Analytics Ready',
+                    message: 'Monthly Computer Science department report is available',
+                    type: 'info',
+                    read: false,
+                    timestamp: new Date(now - 3 * 24 * 60 * 60 * 1000), // 3 days ago
+                    icon: 'fas fa-chart-bar'
+                },
+                {
+                    id: 4,
+                    title: 'Alumni Employment Update',
+                    message: 'John Doe updated employment status to Senior Developer',
+                    type: 'success',
+                    read: true,
+                    timestamp: new Date(now - 4 * 24 * 60 * 60 * 1000), // 4 days ago
+                    icon: 'fas fa-briefcase'
+                }
+            ];
+            
+        case 'admin':
+            return [
+                {
+                    id: 1,
+                    title: 'New User Registration',
+                    message: 'Dr. Sarah Johnson registered as Dean of Psychology',
+                    type: 'info',
+                    read: false,
+                    timestamp: new Date(now - 30 * 60 * 1000), // 30 minutes ago
+                    icon: 'fas fa-user-plus'
+                },
+                {
+                    id: 2,
+                    title: 'System Performance Alert',
+                    message: 'Database query response time increased by 15%',
+                    type: 'warning',
+                    read: false,
+                    timestamp: new Date(now - 2 * 60 * 60 * 1000), // 2 hours ago
+                    icon: 'fas fa-exclamation-triangle'
+                },
+                {
+                    id: 3,
+                    title: 'Bulk Data Import Completed',
+                    message: '150 alumni records imported successfully',
+                    type: 'success',
+                    read: false,
+                    timestamp: new Date(now - 6 * 60 * 60 * 1000), // 6 hours ago
+                    icon: 'fas fa-upload'
+                },
+                {
+                    id: 4,
+                    title: 'Cross-Department Analytics',
+                    message: 'Q4 2024 institutional report generated',
+                    type: 'info',
+                    read: true,
+                    timestamp: new Date(now - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+                    icon: 'fas fa-chart-line'
+                },
+                {
+                    id: 5,
+                    title: 'Security Update',
+                    message: 'Failed login attempts detected from IP 192.168.1.100',
+                    type: 'error',
+                    read: true,
+                    timestamp: new Date(now - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+                    icon: 'fas fa-shield-alt'
+                }
+            ];
+            
+        default:
+            return [];
+    }
+}
+
+function toggleNotifications() {
+    const dropdown = document.getElementById('notificationDropdown');
+    if (dropdown.style.display === 'block') {
+        closeNotifications();
+    } else {
+        openNotifications();
+    }
+}
+
+function openNotifications() {
+    const dropdown = document.getElementById('notificationDropdown');
+    dropdown.style.display = 'block';
+    renderNotifications();
+}
+
+function closeNotifications() {
+    const dropdown = document.getElementById('notificationDropdown');
+    dropdown.style.display = 'none';
+}
+
+function renderNotifications() {
+    const container = document.getElementById('notificationList');
+    if (!container) return;
+    
+    if (notifications.length === 0) {
+        container.innerHTML = `
+            <div class="notification-item empty">
+                <i class="fas fa-bell-slash"></i>
+                <p>No notifications</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = notifications.map(notification => `
+        <div class="notification-item ${notification.read ? 'read' : 'unread'}" data-id="${notification.id}">
+            <div class="notification-icon ${notification.type}">
+                <i class="${notification.icon}"></i>
+            </div>
+            <div class="notification-content">
+                <h4>${notification.title}</h4>
+                <p>${notification.message}</p>
+                <small>${formatNotificationTime(notification.timestamp)}</small>
+            </div>
+            ${!notification.read ? '<div class="notification-dot"></div>' : ''}
+        </div>
+    `).join('');
+    
+    // Add click handlers to mark as read
+    container.querySelectorAll('.notification-item.unread').forEach(item => {
+        item.addEventListener('click', () => markAsRead(parseInt(item.dataset.id)));
+    });
+}
+
+function markAsRead(notificationId) {
+    const notification = notifications.find(n => n.id === notificationId);
+    if (notification && !notification.read) {
+        notification.read = true;
+        unreadCount = Math.max(0, unreadCount - 1);
+        updateNotificationBadge();
+        renderNotifications();
+    }
+}
+
+function updateNotificationBadge() {
+    const badge = document.getElementById('notificationBadge');
+    if (badge) {
+        if (unreadCount > 0) {
+            badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+            badge.style.display = 'block';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
+function formatNotificationTime(timestamp) {
+    const now = new Date();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
+    if (minutes < 1) return 'Just now';
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    if (days < 7) return `${days}d ago`;
+    return timestamp.toLocaleDateString();
+}
+
+function markAllAsRead() {
+    notifications.forEach(n => n.read = true);
+    unreadCount = 0;
+    updateNotificationBadge();
+    renderNotifications();
+}
+
 // Add additional CSS for new components
 const additionalCSS = `
 .activity-list {
@@ -1123,6 +1389,199 @@ const additionalCSS = `
     color: white;
     font-weight: 600;
     font-size: 0.75rem;
+}
+
+/* Notification System Styles */
+.notification-container {
+    position: relative;
+}
+
+.notification-btn {
+    position: relative;
+    background: none;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: all 0.2s;
+}
+
+.notification-btn:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #dc2626;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 350px;
+    max-height: 400px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.notification-header {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9fafb;
+}
+
+.notification-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.mark-all-read {
+    background: none;
+    border: none;
+    color: #dc2626;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.mark-all-read:hover {
+    background: #fef2f2;
+}
+
+.notification-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.notification-item:hover {
+    background: #f9fafb;
+}
+
+.notification-item.unread {
+    background: #fef7f0;
+    border-left: 3px solid #dc2626;
+}
+
+.notification-item.empty {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+    color: #9ca3af;
+    cursor: default;
+}
+
+.notification-item.empty:hover {
+    background: transparent;
+}
+
+.notification-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+.notification-icon.info {
+    background: #3b82f6;
+}
+
+.notification-icon.success {
+    background: #10b981;
+}
+
+.notification-icon.warning {
+    background: #f59e0b;
+}
+
+.notification-icon.error {
+    background: #ef4444;
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-content h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1f2937;
+    line-height: 1.3;
+}
+
+.notification-content p {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.notification-content small {
+    font-size: 0.625rem;
+    color: #9ca3af;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 8px;
+    height: 8px;
+    background: #dc2626;
+    border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+    .notification-dropdown {
+        width: 300px;
+        right: -50px;
+    }
 }
 `;
 
